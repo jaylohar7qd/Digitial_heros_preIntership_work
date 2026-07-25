@@ -1,0 +1,17 @@
+{
+  "name": "page-pulse",
+  "version": "1.0.0",
+  "description": "Page Pulse - Modern Web Auditor",
+  "main": "Project",
+  "scripts": {
+    "start": "node Project",
+    "dev": "node Project"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
+  }
+}
