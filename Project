@@ -9,7 +9,11 @@ const path = require('path');
 const app = express();
 app.use(cors());
 app.use(express.json());
+// Serve static front‑end files
 app.use(express.static(path.join(__dirname, 'public')));
+// Serve .well-known for Chrome devtools
+app.use(express.static(path.join(__dirname, '.well-known')));
+
 
 // Helper to estimate word count
 function estimateWordCount(text) {
