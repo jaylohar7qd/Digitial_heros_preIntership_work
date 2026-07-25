@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Pulse | Professional SEO & Web Auditor</title>
+  <!-- Google Fonts: Outfit for headers, Inter for UI text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons (CDN) for modern outline icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glass-bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <div class="pulse-ring"></div>
+          <i data-lucide="activity"></i>
+        </div>
+        <h1 class="logo-text">Page<span>Pulse</span></h1>
+      </div>
+      <p class="tagline">Audit any URL instantly for SEO, performance, and accessibility metrics</p>
+    </header>
+
+    <main class="main-content">
+      <!-- Search Input Card -->
+      <section class="search-section card">
+        <form id="audit-form" class="search-form">
+          <div class="input-wrapper">
+            <i data-lucide="glob" class="input-icon"></i>
+            <input 
+              type="text" 
+              id="url-input" 
+              placeholder="Enter a website URL (e.g., https://example.com)..." 
+              required
+              autocomplete="off"
+            >
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              <span class="btn-text">Analyze Page</span>
+              <div class="spinner hidden"></div>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Status Messages -->
+      <div id="error-message" class="error-banner hidden">
+        <div class="error-content">
+          <i data-lucide="alert-triangle"></i>
+          <span id="error-text">Failed to fetch the URL. Please verify and try again.</span>
+        </div>
+        <button type="button" class="close-error-btn" id="close-error"><i data-lucide="x"></i></button>
+      </div>
+
+      <!-- Dashboard Loading Skeleton -->
+      <div id="skeleton-loader" class="skeleton-container hidden">
+        <div class="skeleton-header"></div>
+        <div class="skeleton-grid">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+      </div>
+
+      <!-- Audit Results Dashboard -->
+      <section id="results-dashboard" class="results-container hidden">
+        
+        <!-- Audit Header Summary -->
+        <div class="dashboard-header card">
+          <div class="header-left">
+            <h2 id="result-url" class="result-url-text">https://example.com</h2>
+            <div class="meta-row">
+              <span id="badge-status" class="badge badge-success">
+                <i data-lucide="check-circle-2"></i>
+                <span class="badge-label">200 OK</span>
+              </span>
+              <span id="badge-time" class="badge badge-neutral">
+                <i data-lucide="clock"></i>
+                <span class="badge-label">120ms response</span>
+              </span>
+            </div>
+          </div>
+          
+          <!-- Health Score Meter -->
+          <div class="score-card">
+            <div class="score-ring-container">
+              <svg class="score-svg" viewBox="0 0 100 100">
+                <circle class="score-circle-bg" cx="50" cy="50" r="42"></circle>
+                <circle class="score-circle-progress" id="score-ring" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="264"></circle>
+              </svg>
+              <div class="score-value-overlay">
+                <span id="score-number" class="score-value">85</span>
+                <span class="score-percent">%</span>
+              </div>
+            </div>
+            <div class="score-info">
+              <span class="score-title">Health Score</span>
+              <span id="score-grade" class="score-grade label-success">Good</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Grid -->
+        <div class="metrics-grid">
+          
+          <!-- Metric 1: Response Time -->
+          <div class="metric-card card">
+            <div class="metric-header">
+              <span class="metric-title">Response Speed</span>
+              <div class="metric-icon bg-blue-dim"><i data-lucide="zap"></i></div>
+            </div>
+            <div class="metric-body">
+              <div class="metric-value" id="val-speed">150<span class="unit">ms</span></div>
+              <p class="metric-desc" id="desc-speed">Server response time is fast.</p>
+            </div>
+          </div>
+
+          <!-- Metric 2: Word Count -->
+          <div class="metric-card card">
+            <div class="metric-header">
+              <span class="metric-title">Word Count</span>
+              <div class="metric-icon bg-green-dim"><i data-lucide="file-text"></i></div>
+            </div>
+            <div class="metric-body">
+              <div class="metric-value" id="val-words">420</div>
+              <p class="metric-desc" id="desc-words">Good amount of text content.</p>
+            </div>
+          </div>
+
+          <!-- Metric 3: H1 Header -->
+          <div class="metric-card card">
+            <div class="metric-header">
+              <span class="metric-title">H1 Headers</span>
+              <div class="metric-icon bg-purple-dim"><i data-lucide="heading"></i></div>
+            </div>
+            <div class="metric-body">
+              <div class="metric-value" id="val-h1">1</div>
+              <p class="metric-desc" id="desc-h1">Page has exactly one H1 header.</p>
+            </div>
+          </div>
+
+          <!-- Metric 4: Alt Images -->
+          <div class="metric-card card">
+            <div class="metric-header">
+              <span class="metric-title">Missing Alt Text</span>
+              <div class="metric-icon bg-orange-dim"><i data-lucide="image-off"></i></div>
+            </div>
+            <div class="metric-body">
+              <div class="metric-value" id="val-alt">0</div>
+              <p class="metric-desc" id="desc-alt">All images have alternative text.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Audit Details List -->
+        <div class="details-section card">
+          <h3 class="section-title">Audit Insights</h3>
+          <div class="audit-list">
+            
+            <!-- Audit Item 1: Title -->
+            <div class="audit-item" id="audit-item-title">
+              <div class="audit-status-icon"><i data-lucide="check-circle" class="text-success"></i></div>
+              <div class="audit-content">
+                <h4 class="audit-label">Page Title Tag</h4>
+                <p class="audit-detail-text" id="detail-title">Example Domain</p>
+                <div class="audit-feedback" id="feedback-title">Title looks great! It falls within the ideal 10-60 characters limit.</div>
+              </div>
+            </div>
+
+            <!-- Audit Item 2: Meta Description -->
+            <div class="audit-item" id="audit-item-meta">
+              <div class="audit-status-icon"><i data-lucide="help-circle" class="text-warning"></i></div>
+              <div class="audit-content">
+                <h4 class="audit-label">Meta Description</h4>
+                <p class="audit-detail-text" id="detail-meta">Not found on page</p>
+                <div class="audit-feedback" id="feedback-meta">Adding a meta description (50-160 chars) will help search engines summarize your page.</div>
+              </div>
+            </div>
+
+            <!-- Audit Item 3: Images Check -->
+            <div class="audit-item" id="audit-item-images">
+              <div class="audit-status-icon"><i data-lucide="x-circle" class="text-danger"></i></div>
+              <div class="audit-content">
+                <h4 class="audit-label">Image Alt Attribute Check</h4>
+                <p class="audit-detail-text" id="detail-images">3 images found without alternate descriptions.</p>
+                <div class="audit-feedback" id="feedback-images">Images missing alt text are bad for SEO and screen readers.</div>
+                <!-- Image alt details list -->
+                <div class="missing-images-preview hidden" id="missing-images-preview">
+                  <h5>Samples of missing alt images:</h5>
+                  <ul id="missing-images-list" class="image-sample-list">
+                    <!-- Dynamic sample items -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p class="footer-credit">
+        Built for <a href="https://digitalheroesco.com" target="_blank" rel="noopener noreferrer">Digital Heroes Training Task</a>
+      </p>
+      <p class="footer-meta">&copy; 2026 Page Pulse Auditor. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Initialize Lucide icons on load
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
